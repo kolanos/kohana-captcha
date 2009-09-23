@@ -19,7 +19,7 @@
 
 return array(
 	'default' => array(
-		'type'      => 'basic',
+		'style'      => 'basic',
 		'width'      => 150,
 		'height'     => 50,
 		'complexity' => 4,
