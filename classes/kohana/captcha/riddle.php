@@ -19,7 +19,7 @@ class Kohana_Captcha_Riddle extends Kohana_Captcha {
 	public function generate_challenge()
 	{
 		// Load riddles from the current language
-		$riddles = Kohana::lang('captcha.riddles');
+		$riddles = Kohana::config('captcha.riddles');
 
 		// Pick a random riddle
 		$riddle = $riddles[array_rand($riddles)];
@@ -37,7 +37,7 @@ class Kohana_Captcha_Riddle extends Kohana_Captcha {
 	 * @param   boolean  html output
 	 * @return  mixed
 	 */
-	public function render($html)
+	public function render($html = TRUE)
 	{
 		return $this->riddle;
 	}

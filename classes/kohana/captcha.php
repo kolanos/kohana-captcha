@@ -40,10 +40,19 @@ abstract class Kohana_Captcha {
 	 *
 	 * @return  object
 	 */
-	public static function instance()
+	public static function instance($group = 'default')
 	{
-		// Create the instance if it does not exist
-		empty(Captcha::$instance) and new Captcha;
+		if ( ! isset(Captcha::$instance))
+		{
+			// Load the configuration for this group
+			$config = Kohana::config('captcha')->get($group);
+
+			// Set the captcha class name
+			$class = 'Captcha_'.ucfirst($config['style']);
+
+			// Create a new captcha instance
+			Captcha::$instance = new $class($group);
+		}
 
 		return Captcha::$instance;
 	}
@@ -54,7 +63,7 @@ abstract class Kohana_Captcha {
 	 * @param   string  config group name
 	 * @return  object
 	 */
-	public static function factory($name = 'default', )
+	public static function factory($group = 'default')
 	{
 		return new Captcha($group);
 	}
@@ -78,7 +87,7 @@ abstract class Kohana_Captcha {
 		}
 
 		// Load and validate config group
-		if ( ! is_array($config = Kohana::config('captcha.'.$group)))
+		if ( ! is_array($config = Kohana::config('captcha')->get($group)))
 			throw new Kohana_Exception('Captcha group not defined in :group configuration',
 					array(':group' => $group));
 
@@ -128,15 +137,20 @@ abstract class Kohana_Captcha {
 						array(':file' => Captcha::$config['fontpath'].$font));
 			}
 		}
-
-		// Set driver name
-		$driver = 'Captcha_'.ucfirst($config['style']);
-
-		// Initialize the driver
-		$this->driver = new $driver;
 		
 		// Generate a new challenge
-		$this->response = $this->driver->generate_challenge();
+		$this->response = $this->generate_challenge();	
+	}
+	
+	/**
+	 * Destructs a Captcha object.
+	 *
+	 * @return  void
+	 */
+	public function __destruct()
+	{
+		// Store the correct Captcha response in a session
+		$this->update_response_session();
 	}
 
 	/**
@@ -264,7 +278,7 @@ abstract class Kohana_Captcha {
 	 */
 	public function __toString()
 	{
-		return $this->driver->render();
+		return $this->render(TRUE);
 	}
 	
 	/**
@@ -276,6 +290,7 @@ abstract class Kohana_Captcha {
 	 */
 	public function update_response_session()
 	{
+		Session::instance()->set('captcha_response_clean', $this->response);
 		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));
 	}
 
@@ -423,7 +438,9 @@ abstract class Kohana_Captcha {
 			return '<img alt="Captcha" src="'.url::site('captcha/'.Captcha::$config['group']).'" width="'.Captcha::$config['width'].'" height="'.Captcha::$config['height'].'" />';
 
 		// Send the correct HTTP header
-		header('Content-Type: image/'.$this->image_type);
+		$this->request->headers['Cache-Control'] = 'no-cache, must-revalidate';
+		$this->request->headers['Expires'] = 'Sun, 30 Jul 1989 19:30:00 GMT';
+		$this->request->headers['Content-Type'] = 'image/'.$this->image_type;
 
 		// Pick the correct output function
 		$function = 'image'.$this->image_type;
@@ -431,13 +448,6 @@ abstract class Kohana_Captcha {
 
 		// Free up resources
 		imagedestroy($this->image);
-	}
-	
-	public function after()
-	{
-		// Store the correct Captcha response in a session
-		//Event::add('system.post_controller', array($this, 'update_response_session'));
-		$this->update_response_session();
 	}
 	
 	/* DRIVER METHODS */
@@ -455,6 +465,6 @@ abstract class Kohana_Captcha {
 	 * @param   boolean  html output
 	 * @return  mixed    the rendered Captcha (e.g. an image, riddle, etc.)
 	 */
-	abstract public function render($html);
+	abstract public function render($html = TRUE);
 
 } // End Captcha Class

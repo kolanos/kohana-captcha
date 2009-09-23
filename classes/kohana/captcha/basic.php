@@ -26,7 +26,7 @@ class Kohana_Captcha_Basic extends Kohana_Captcha {
 	 * @param   boolean  html output
 	 * @return  mixed
 	 */
-	public function render($html)
+	public function render($html = TRUE)
 	{
 		// Creates $this->image
 		$this->image_create(Captcha::$config['background']);

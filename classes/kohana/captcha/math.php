@@ -51,7 +51,7 @@ class Kohana_Captcha_Math extends Kohana_Captcha {
 	 * @param   boolean  html output
 	 * @return  mixed
 	 */
-	public function render($html)
+	public function render($html = TRUE)
 	{
 		return $this->math_exercice;
 	}

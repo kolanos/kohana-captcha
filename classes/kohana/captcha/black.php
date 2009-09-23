@@ -26,7 +26,7 @@ class Kohana_Captcha_Black extends Kohana_Captcha {
 	 * @param   boolean  html output
 	 * @return  mixed
 	 */
-	public function render($html)
+	public function render($html = TRUE)
 	{
 		// Creates a black image to start from
 		$this->image_create(Captcha::$config['background']);
