@@ -58,17 +58,6 @@ abstract class Kohana_Captcha {
 	}
 
 	/**
-	 * Constructs and returns a new Captcha object.
-	 *
-	 * @param   string  config group name
-	 * @return  object
-	 */
-	public static function factory($group = 'default')
-	{
-		return new Captcha($group);
-	}
-
-	/**
 	 * Constructs a new Captcha object.
 	 *
 	 * @throws  Kohana_Exception
@@ -149,6 +138,8 @@ abstract class Kohana_Captcha {
 	 */
 	public function __destruct()
 	{
+		Session::instance()->set('captcha_response_clean', $this->response);
+		
 		// Store the correct Captcha response in a session
 		$this->update_response_session();
 	}
@@ -290,7 +281,6 @@ abstract class Kohana_Captcha {
 	 */
 	public function update_response_session()
 	{
-		Session::instance()->set('captcha_response_clean', $this->response);
 		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));
 	}
 
@@ -435,11 +425,11 @@ abstract class Kohana_Captcha {
 	{
 		// Output html element
 		if ($html)
-			return '<img alt="Captcha" src="'.url::site('captcha/'.Captcha::$config['group']).'" width="'.Captcha::$config['width'].'" height="'.Captcha::$config['height'].'" />';
+			return '<img src="'.url::site('captcha/'.Captcha::$config['group']).'" width="'.Captcha::$config['width'].'" height="'.Captcha::$config['height'].'" alt="Captcha" class="captcha" />';
 
 		// Send the correct HTTP header
-		$this->request->headers['Cache-Control'] = 'no-cache, must-revalidate';
-		$this->request->headers['Expires'] = 'Sun, 30 Jul 1989 19:30:00 GMT';
+		//$this->request->headers['Cache-Control'] = 'no-cache, must-revalidate';
+		//$this->request->headers['Expires'] = 'Sun, 30 Jul 1989 19:30:00 GMT';
 		$this->request->headers['Content-Type'] = 'image/'.$this->image_type;
 
 		// Pick the correct output function

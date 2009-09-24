@@ -19,7 +19,7 @@
 
 return array(
 	'default' => array(
-		'style'      => 'riddle',
+		'style'      => 'alpha',
 		'width'      => 150,
 		'height'     => 50,
 		'complexity' => 4,
