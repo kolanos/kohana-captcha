@@ -138,7 +138,8 @@ abstract class Kohana_Captcha {
 	 */
 	public function __destruct()
 	{
-		Session::instance()->set('captcha_response_clean', $this->response);
+		// Testing only
+		//Session::instance()->set('captcha_response_clean', $this->response);
 		
 		// Store the correct Captcha response in a session
 		$this->update_response_session();
