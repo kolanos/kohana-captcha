@@ -28,12 +28,9 @@ class Kohana_Captcha_Word extends Kohana_Captcha_Basic {
 				return strtoupper($word);
 		}
 		
+		// Return any random word as final fallback
 		$word = strtoupper($words[array_rand($words)]);
 
-		// Store the correct Captcha response in a session
-		Session::instance()->set('captcha_response', sha1($word));
-
-		// Return any random word as final fallback
 		return $word;
 	}
 

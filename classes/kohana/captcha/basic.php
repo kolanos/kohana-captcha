@@ -19,9 +19,6 @@ class Kohana_Captcha_Basic extends Kohana_Captcha {
 		// Complexity setting is used as character count
 		$text = text::random('distinct', max(1, Captcha::$config['complexity']));
 		
-		// Store the correct Captcha response in a session
-		Session::instance()->set('captcha_response', sha1(strtoupper($text)));
-	
 		return $text;
 	}
 

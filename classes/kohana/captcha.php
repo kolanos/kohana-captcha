@@ -51,7 +51,10 @@ abstract class Kohana_Captcha {
 			$class = 'Captcha_'.ucfirst($config['style']);
 
 			// Create a new captcha instance
-			Captcha::$instance = new $class($group);
+			Captcha::$instance = $captcha = new $class($group);
+		
+			// Save captcha response at shutdown
+			register_shutdown_function(array($captcha, 'update_response_session'));
 		}
 
 		return Captcha::$instance;
@@ -128,7 +131,18 @@ abstract class Kohana_Captcha {
 		}
 		
 		// Generate a new challenge
-		$this->response = $this->generate_challenge();	
+		$this->response = $this->generate_challenge();
+	}
+
+	/**
+	 * Update captcha response session variable.
+	 *
+	 * @return  void
+	 */
+	public function update_response_session()
+	{
+		// Store the correct Captcha response in a session
+		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));	
 	}
 
 	/**
