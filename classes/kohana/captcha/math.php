@@ -9,7 +9,7 @@
  */
 class Kohana_Captcha_Math extends Kohana_Captcha {
 
-	private $math_exercice;
+	private $math_exercise;
 
 	/**
 	 * Generates a new Captcha challenge.
@@ -39,10 +39,13 @@ class Kohana_Captcha_Math extends Kohana_Captcha {
 		}
 
 		// Store the question for output
-		$this->math_exercice = implode(' + ', $numbers).' = ';
+		$this->math_exercise = implode(' + ', $numbers).' = ';
 
+		// Store the correct Captcha response in a session
+		Session::instance()->set('captcha_response', sha1(array_sum($numbers)));
+		
 		// Return the answer
-		return array_sum($numbers);
+		return array_sum($numbers);	
 	}
 
 	/**
@@ -53,7 +56,7 @@ class Kohana_Captcha_Math extends Kohana_Captcha {
 	 */
 	public function render($html = TRUE)
 	{
-		return $this->math_exercice;
+		return $this->math_exercise;
 	}
 
 } // End Captcha Math Driver Class

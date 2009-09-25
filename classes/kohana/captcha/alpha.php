@@ -17,7 +17,13 @@ class Kohana_Captcha_Alpha extends Kohana_Captcha {
 	public function generate_challenge()
 	{
 		// Complexity setting is used as character count
-		return text::random('distinct', max(1, Captcha::$config['complexity']));
+		$text = text::random('distinct', max(1, Captcha::$config['complexity']));
+		
+		// Store the correct Captcha response in a session
+		Session::instance()->set('captcha_response', sha1(strtoupper($text)));
+
+		// Complexity setting is used as character count
+		return $text;
 	}
 
 	/**

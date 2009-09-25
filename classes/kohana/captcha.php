@@ -130,20 +130,6 @@ abstract class Kohana_Captcha {
 		// Generate a new challenge
 		$this->response = $this->generate_challenge();	
 	}
-	
-	/**
-	 * Destructs a Captcha object.
-	 *
-	 * @return  void
-	 */
-	public function __destruct()
-	{
-		// Testing only
-		//Session::instance()->set('captcha_response_clean', $this->response);
-		
-		// Store the correct Captcha response in a session
-		$this->update_response_session();
-	}
 
 	/**
 	 * Validates a Captcha response and updates response counter.
@@ -271,18 +257,6 @@ abstract class Kohana_Captcha {
 	public function __toString()
 	{
 		return $this->render(TRUE);
-	}
-	
-	/**
-	 * Stores the response for the current Captcha challenge in a session so it is available
-	 * on the next page load for Captcha::valid(). This method is called after controller
-	 * execution (in the system.post_controller event) in order not to overwrite itself too soon.
-	 *
-	 * @return  void
-	 */
-	public function update_response_session()
-	{
-		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));
 	}
 
 	/**

@@ -27,6 +27,9 @@ class Kohana_Captcha_Riddle extends Kohana_Captcha {
 		// Store the question for output
 		$this->riddle = $riddle[0];
 
+		// Store the correct Captcha response in a session
+		Session::instance()->set('captcha_response', sha1(strtoupper($riddle[1])));
+		
 		// Return the answer
 		return $riddle[1];
 	}
