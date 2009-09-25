@@ -18,7 +18,7 @@ Render a captcha:
 
 or just:
 
-> $captcha();
+> $captcha;
 
 Validate the captcha:
 
