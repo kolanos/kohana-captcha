@@ -19,14 +19,15 @@
 
 return array(
 	'default' => array(
-		'style'      => 'alpha',
-		'width'      => 150,
-		'height'     => 50,
-		'complexity' => 4,
-		'background' => '',
-		'fontpath'   => MODPATH.'captcha/fonts/',
-		'fonts'      => array('DejaVuSerif.ttf'),
-		'promote'    => FALSE,
+		'style'      	=> 'alpha',
+		'width'      	=> 150,
+		'height'     	=> 50,
+		'complexity' 	=> 4,
+		'background' 	=> '',
+		'fontpath'   	=> MODPATH.'captcha/fonts/',
+		'fonts'      	=> array('DejaVuSerif.ttf'),
+		'promote'    	=> FALSE,
+		'session_type'	=> 'native',
 	),
 	// Words of varying length for Captcha_Word to pick from
 	// Note: use only alphanumeric characters
