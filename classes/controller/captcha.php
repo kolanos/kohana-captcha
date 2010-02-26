@@ -6,18 +6,25 @@
  *
  * $Id: captcha.php 3769 2008-12-15 00:48:56Z zombor $
  *
- * @package    Captcha
- * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @package		Captcha
+ * @subpackage	Controller_Captcha
+ * @author		Michael Lavers
+ * @author		Kohana Team
+ * @copyright	(c) 2008-2010 Kohana Team
+ * @license		http://kohanaphp.com/license.html
  */
 class Controller_Captcha extends Controller {
 
 	/**
-	 * @var  boolean  auto render template
+	 * @var boolean Auto render template
 	 **/
 	public $auto_render = FALSE;
 
+	/**
+	 * Output the captcha challenge
+	 *
+	 * @param string $group Config group name
+	 */
 	public function action_index($group = 'default')
 	{
 		// Output the Captcha challenge resource (no html)

@@ -2,19 +2,24 @@
 /**
  * Math captcha class.
  *
- * @package    Captcha
- * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
+ * @package		Captcha
+ * @subpackage	Captcha_Math
+ * @author		Michael Lavers
+ * @author		Kohana Team
+ * @copyright  (c) 2008-2010 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
 class Captcha_Math extends Captcha
 {
+	/**
+	 * @var string Captcha math exercise
+	 */
 	private $math_exercise;
 
 	/**
 	 * Generates a new Captcha challenge.
 	 *
-	 * @return  string  the challenge answer
+	 * @return string The challenge answer
 	 */
 	public function generate_challenge()
 	{
@@ -48,8 +53,8 @@ class Captcha_Math extends Captcha
 	/**
 	 * Outputs the Captcha riddle.
 	 *
-	 * @param   boolean  html output
-	 * @return  mixed
+	 * @param boolean $html HTML output
+	 * @return mixed
 	 */
 	public function render($html = TRUE)
 	{

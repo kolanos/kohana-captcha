@@ -2,17 +2,19 @@
 /**
  * Word captcha class.
  *
- * @package    Captcha
- * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @package		Captcha
+ * @subpackage	Captcha_Word
+ * @author		Michael Lavers
+ * @author		Kohana Team
+ * @copyright	(c) 2008-2010 Kohana Team
+ * @license		http://kohanaphp.com/license.html
  */
 class Captcha_Word extends Captcha_Basic
 {
 	/**
 	 * Generates a new Captcha challenge.
 	 *
-	 * @return  string  the challenge answer
+	 * @return string The challenge answer
 	 */
 	public function generate_challenge()
 	{
@@ -29,9 +31,7 @@ class Captcha_Word extends Captcha_Basic
 		}
 		
 		// Return any random word as final fallback
-		$word = strtoupper($words[array_rand($words)]);
-
-		return $word;
+		return strtoupper($words[array_rand($words)]);
 	}
 
 } // End Captcha Word Driver Class
