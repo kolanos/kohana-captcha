@@ -29,7 +29,10 @@ class Controller_Captcha extends Controller {
 	{
 		// Output the Captcha challenge resource (no html)
 		// Pull the config group name from the URL
-		$this->request->response = Captcha::instance($group)->render(FALSE);
+		$captcha = Captcha::instance($group)->render(FALSE);
+		$this->request->headers['Content-Type'] = File::mime($captcha);
+		$this->request->headers['Content-length'] = filesize($captcha);
+		$this->request->response = $captcha;
 	}
 
 } // End Captcha_Controller
