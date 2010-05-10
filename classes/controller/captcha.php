@@ -31,6 +31,7 @@ class Controller_Captcha extends Controller {
 		// Pull the config group name from the URL
 		$captcha = Captcha::instance($group)->render(FALSE);
 		$this->request->headers['Content-Type'] = File::mime($captcha);
+		$this->request->headers['Connection'] = 'close';
 		$this->request->headers['Content-length'] = filesize($captcha);
 		$this->request->response = $captcha;
 	}
