@@ -31,8 +31,10 @@ class Controller_Captcha extends Controller {
 		// Pull the config group name from the URL
 		$captcha = Captcha::instance($group)->render(FALSE);
 		$this->request->headers['Content-Type'] = File::mime($captcha);
+		// The necessity of this header is questionable and causes problems in Safari and other WebKit browsers.
+		// Uncomment at your own peril, scheduled for removal unless a case can be made to keep it.
+		//$this->request->headers['Content-Length'] = filesize($captcha);
 		$this->request->headers['Connection'] = 'close';
-		$this->request->headers['Content-length'] = filesize($captcha);
 		$this->request->response = $captcha;
 	}
 
