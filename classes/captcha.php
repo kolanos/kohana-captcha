@@ -33,7 +33,6 @@ abstract class Captcha
 		'fontpath'   	=> '',
 		'fonts'      	=> array(),
 		'promote'    	=> FALSE,
-		'session_type'	=> 'native',
 	);
 
 	/**
@@ -71,7 +70,7 @@ abstract class Captcha
 			Captcha::$instance = $captcha = new $class($group);
 
 			// Save captcha response at shutdown
-			register_shutdown_function(array($captcha, 'update_response_session'));
+			//register_shutdown_function(array($captcha, 'update_response_session'));
 		}
 
 		return Captcha::$instance;
@@ -159,7 +158,7 @@ abstract class Captcha
 	public function update_response_session()
 	{
 		// Store the correct Captcha response in a session
-		Session::instance(Captcha::$config['session_type'])->set('captcha_response', sha1(strtoupper($this->response)));
+		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));
 	}
 
 	/**
@@ -179,7 +178,7 @@ abstract class Captcha
 			return TRUE;
 
 		// Challenge result
-		$result = (bool) (sha1(strtoupper($response)) === Session::instance(Captcha::$config['session_type'])->get('captcha_response'));
+		$result = (bool) (sha1(strtoupper($response)) === Session::instance()->get('captcha_response'));
 
 		// Increment response counter
 		if ($counted !== TRUE)
@@ -189,12 +188,12 @@ abstract class Captcha
 			// Valid response
 			if ($result === TRUE)
 			{
-				Captcha::instance()->valid_count(Session::instance(Captcha::$config['session_type'])->get('captcha_valid_count') + 1);
+				Captcha::instance()->valid_count(Session::instance()->get('captcha_valid_count') + 1);
 			}
 			// Invalid response
 			else
 			{
-				Captcha::instance()->invalid_count(Session::instance(Captcha::$config['session_type'])->get('captcha_invalid_count') + 1);
+				Captcha::instance()->invalid_count(Session::instance()->get('captcha_invalid_count') + 1);
 			}
 		}
 
@@ -221,12 +220,12 @@ abstract class Captcha
 			// Reset counter = delete session
 			if ($new_count < 1)
 			{
-				Session::instance(Captcha::$config['session_type'])->delete($session);
+				Session::instance()->delete($session);
 			}
 			// Set counter to new value
 			else
 			{
-				Session::instance(Captcha::$config['session_type'])->set($session, (int) $new_count);
+				Session::instance()->set($session, (int) $new_count);
 			}
 
 			// Return new count
@@ -234,7 +233,7 @@ abstract class Captcha
 		}
 
 		// Return current count
-		return (int) Session::instance(Captcha::$config['session_type'])->get($session);
+		return (int) Session::instance()->get($session);
 	}
 
 	/**
@@ -431,13 +430,14 @@ abstract class Captcha
 	public function image_render($html)
 	{
 		// Output html element
-		if ($html)
+		if ($html === TRUE)
 			return '<img src="'.url::site('captcha/'.Captcha::$config['group']).'" width="'.Captcha::$config['width'].'" height="'.Captcha::$config['height'].'" alt="Captcha" class="captcha" />';
 
 		// Send the correct HTTP header
-		//$this->request->headers['Cache-Control'] = 'no-cache, must-revalidate';
-		//$this->request->headers['Expires'] = 'Sun, 30 Jul 1989 19:30:00 GMT';
-		$this->request->headers['Content-Type'] = 'image/'.$this->image_type;
+        Request::instance()->headers['Content-Type'] = 'image/'.$this->image_type;
+        Request::instance()->headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0';
+        Request::instance()->headers['Pragma'] = 'no-cache';
+        Request::instance()->headers['Connection'] = 'close';
 
 		// Pick the correct output function
 		$function = 'image'.$this->image_type;

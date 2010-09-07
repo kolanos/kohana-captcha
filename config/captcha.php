@@ -27,7 +27,6 @@ return array(
 		'fontpath'   	=> MODPATH.'captcha/fonts/',
 		'fonts'      	=> array('DejaVuSerif.ttf'),
 		'promote'    	=> FALSE,
-		'session_type'	=> 'native',
 	),
 	// Words of varying length for Captcha_Word to pick from
 	// Note: use only alphanumeric characters

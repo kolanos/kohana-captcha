@@ -29,13 +29,12 @@ class Controller_Captcha extends Controller {
 	{
 		// Output the Captcha challenge resource (no html)
 		// Pull the config group name from the URL
-		$captcha = Captcha::instance($group)->render(FALSE);
-		$this->request->headers['Content-Type'] = File::mime($captcha);
-		// The necessity of this header is questionable and causes problems in Safari and other WebKit browsers.
-		// Uncomment at your own peril, scheduled for removal unless a case can be made to keep it.
-		//$this->request->headers['Content-Length'] = filesize($captcha);
-		$this->request->headers['Connection'] = 'close';
-		$this->request->response = $captcha;
+		Captcha::instance($group)->render(FALSE);
+	}
+	
+	public function after()
+	{
+		Captcha::update_response_session();
 	}
 
 } // End Captcha_Controller
