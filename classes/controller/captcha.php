@@ -34,7 +34,7 @@ class Controller_Captcha extends Controller {
 	
 	public function after()
 	{
-		Captcha::update_response_session();
+		Captcha::instance()->update_response_session();
 	}
 
 } // End Captcha_Controller
