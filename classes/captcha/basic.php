@@ -51,11 +51,11 @@ class Captcha_Basic extends Captcha
 		}
 
 		// Calculate character font-size and spacing
-		$default_size = min(Captcha::$config['width'], Captcha::$config['height'] * 2) / (strlen($this->response) + 1);
-		$spacing = (int) (Captcha::$config['width'] * 0.9 / strlen($this->response));
+		$default_size = min(Captcha::$config['width'], Captcha::$config['height'] * 2) / (utf8::strlen($this->response) + 1);
+		$spacing = (int) (Captcha::$config['width'] * 0.9 / utf8::strlen($this->response));
 
 		// Draw each Captcha character with varying attributes
-		for ($i = 0, $strlen = strlen($this->response); $i < $strlen; $i++)
+		for ($i = 0, $strlen = utf8::strlen($this->response); $i < $strlen; $i++)
 		{
 			// Use different fonts if available
 			$font = Captcha::$config['fontpath'].Captcha::$config['fonts'][array_rand(Captcha::$config['fonts'])];
@@ -66,14 +66,14 @@ class Captcha_Basic extends Captcha
 
 			// Scale the character size on image height
 			$size = $default_size / 10 * mt_rand(8, 12);
-			$box = imageftbbox($size, $angle, $font, $this->response[$i]);
+			$box = imageftbbox($size, $angle, $font, utf8::substr($this->response, $i, 1));
 
 			// Calculate character starting coordinates
 			$x = $spacing / 4 + $i * $spacing;
 			$y = Captcha::$config['height'] / 2 + ($box[2] - $box[5]) / 4;
 
 			// Write text character to image
-			imagefttext($this->image, $size, $angle, $x, $y, $color, $font, $this->response[$i]);
+			imagefttext($this->image, $size, $angle, $x, $y, $color, $font, utf8::substr($this->response, $i, 1));
 		}
 
 		// Output

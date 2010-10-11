@@ -26,12 +26,12 @@ class Captcha_Word extends Captcha_Basic
 		foreach ($words as $word)
 		{
 			// ...until we find one of the desired length
-			if (abs(Captcha::$config['complexity'] - strlen($word)) < 2)
-				return strtoupper($word);
+			if (abs(Captcha::$config['complexity'] - utf8::strlen($word)) < 2)
+				return utf8::strtoupper($word);
 		}
 		
 		// Return any random word as final fallback
-		return strtoupper($words[array_rand($words)]);
+		return utf8::strtoupper($words[array_rand($words)]);
 	}
 
 } // End Captcha Word Driver Class
