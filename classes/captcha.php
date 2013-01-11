@@ -158,7 +158,7 @@ abstract class Captcha
 	public function update_response_session()
 	{
 		// Store the correct Captcha response in a session
-		Session::instance()->set('captcha_response', sha1(strtoupper($this->response)));
+		Session::instance()->set('captcha_response', sha1(utf8::strtoupper($this->response)));
 	}
 
 	/**
@@ -178,7 +178,7 @@ abstract class Captcha
 			return TRUE;
 
 		// Challenge result
-		$result = (bool) (sha1(strtoupper($response)) === Session::instance()->get('captcha_response'));
+		$result = (bool) (sha1(utf8::strtoupper($response)) === Session::instance()->get('captcha_response'));
 
 		// Increment response counter
 		if ($counted !== TRUE)

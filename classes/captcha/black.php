@@ -49,9 +49,9 @@ class Captcha_Black extends Captcha
 		$font = Captcha::$config['fontpath'].Captcha::$config['fonts'][array_rand(Captcha::$config['fonts'])];
 
 		// Draw the character's white shadows
-		$size = (int) min(Captcha::$config['height'] / 2, Captcha::$config['width'] * 0.8 / strlen($this->response));
-		$angle = mt_rand(-15 + strlen($this->response), 15 - strlen($this->response));
-		$x = mt_rand(1, Captcha::$config['width'] * 0.9 - $size * strlen($this->response));
+		$size = (int) min(Captcha::$config['height'] / 2, Captcha::$config['width'] * 0.8 / utf8::strlen($this->response));
+		$angle = mt_rand(-15 + utf8::strlen($this->response), 15 - utf8::strlen($this->response));
+		$x = mt_rand(1, Captcha::$config['width'] * 0.9 - $size * utf8::strlen($this->response));
 		$y = ((Captcha::$config['height'] - $size) / 2) + $size;
 		$color = imagecolorallocate($this->image, 255, 255, 255);
 		imagefttext($this->image, $size, $angle, $x + 1, $y + 1, $color, $font, $this->response);
