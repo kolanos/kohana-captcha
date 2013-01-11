@@ -61,7 +61,7 @@ abstract class Captcha
 		if ( ! isset(Captcha::$instance))
 		{
 			// Load the configuration for this group
-			$config = Kohana::config('captcha')->get($group);
+			$config = Kohana::$config->load('captcha')->get($group);
 
 			// Set the captcha driver class name
 			$class = 'Captcha_'.ucfirst($config['style']);
@@ -95,7 +95,7 @@ abstract class Captcha
 		}
 
 		// Load and validate config group
-		if ( ! is_array($config = Kohana::config('captcha')->get($group)))
+		if ( ! is_array($config = Kohana::$config->load('captcha')->get($group)))
 			throw new Kohana_Exception('Captcha group not defined in :group configuration',
 					array(':group' => $group));
 
@@ -103,7 +103,7 @@ abstract class Captcha
 		if ($group !== 'default')
 		{
 			// Load and validate default config group
-			if ( ! is_array($default = Kohana::config('captcha')->get('default')))
+			if ( ! is_array($default = Kohana::$config->load('captcha')->get('default')))
 				throw new Kohana_Exception('Captcha group not defined in :group configuration',
 					array(':group' => 'default'));
 
